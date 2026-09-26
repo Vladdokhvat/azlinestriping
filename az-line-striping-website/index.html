@@ -25,16 +25,37 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 input::placeholder,textarea::placeholder{color:#6B6D66}
 </style>
 <style>[hidden]{display:none !important}</style>
+<style>
+.nav-toggle{display:none;align-items:center;justify-content:center;width:48px;height:48px;padding:0;background:transparent;color:#F5F6F0;border:2px solid #3A3B36;border-radius:6px;cursor:pointer}
+.nav-toggle:hover{border-color:#D5EC28}
+.nav-toggle .icon-close{display:none}
+.site-header.nav-open .nav-toggle .icon-open{display:none}
+.site-header.nav-open .nav-toggle .icon-close{display:block}
+@media (max-width:900px){
+  .site-header{flex-wrap:nowrap !important;padding:16px 20px !important}
+  .site-header > a img{height:40px !important}
+  .nav-toggle{display:inline-flex}
+  .main-nav{display:none !important}
+  .site-header.nav-open .main-nav{display:flex !important;position:absolute;top:100%;left:0;right:0;z-index:50;flex-direction:column;align-items:stretch !important;gap:0 !important;padding:8px 20px 24px;background:#1F201D;border-top:1px solid #3A3B36;border-bottom:4px solid #D5EC28;box-shadow:0 16px 32px rgba(0,0,0,.35);font-size:18px !important}
+  .site-header.nav-open .main-nav .nav-link{display:block;padding:14px 0;border-bottom:1px solid #3A3B36;opacity:1}
+  .site-header.nav-open .main-nav .btn-yellow{justify-content:center;min-height:56px !important;margin-top:20px;font-size:17px}
+  section[id]{scroll-margin-top:8px}
+}
+</style>
 </head>
 <body>
 <div style="width: 100%; min-width: 320px; background: #1F201D; color: #F5F6F0; overflow: hidden">
 
 <!-- Header -->
-<header style="box-sizing: border-box; width: 100%; max-width: 1360px; margin: 0 auto; padding: 22px 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap">
+<header class="site-header" style="position: relative; box-sizing: border-box; width: 100%; max-width: 1360px; margin: 0 auto; padding: 22px 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap">
 <a href="#top" aria-label="A-Z Line Striping home" style="display: flex; align-items: center">
 <img src="images/az-logo-horizontal.svg" alt="A-Z Line Striping" style="height: 48px; width: auto; display: block">
 </a>
-<nav aria-label="Main" style="display: flex; align-items: center; gap: 32px; flex-wrap: wrap; font-size: 15px; font-weight: 600">
+<button type="button" class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Open menu">
+<svg class="icon-open" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+<svg class="icon-close" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"></path></svg>
+</button>
+<nav id="main-nav" class="main-nav" aria-label="Main" style="display: flex; align-items: center; gap: 32px; flex-wrap: wrap; font-size: 15px; font-weight: 600">
 <a class="nav-link" href="#services">Services</a>
 <a class="nav-link" href="#how">How it works</a>
 <a class="nav-link" href="#area">Service area</a>
@@ -302,6 +323,18 @@ input::placeholder,textarea::placeholder{color:#6B6D66}
       .finally(function(){btn.disabled=false;btn.textContent='Request my free estimate';});
   });
   again.addEventListener('click',function(){ok.hidden=true;f.hidden=false;});
+})();
+</script>
+<script>
+(function(){
+  var h=document.querySelector('.site-header'),b=h&&h.querySelector('.nav-toggle'),n=document.getElementById('main-nav');
+  if(!b)return;
+  function set(open){h.classList.toggle('nav-open',open);b.setAttribute('aria-expanded',open);b.setAttribute('aria-label',open?'Close menu':'Open menu');}
+  b.addEventListener('click',function(){set(!h.classList.contains('nav-open'));});
+  n.addEventListener('click',function(e){if(e.target.closest('a'))set(false);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&h.classList.contains('nav-open')){set(false);b.focus();}});
+  document.addEventListener('click',function(e){if(!h.contains(e.target))set(false);});
+  window.matchMedia('(min-width:901px)').addEventListener('change',function(m){if(m.matches)set(false);});
 })();
 </script>
 </body>
